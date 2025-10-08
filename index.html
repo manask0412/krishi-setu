@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>KrishiSetu — Home</title>
+
+    <!-- Tailwind CDN (for prototype/demo). For production, build locally. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for Govt. Rate chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+      /* Small overrides for consistent rounded cards and shadows */
+      .card {
+        @apply bg-white rounded-xl shadow-md p-5;
+      }
+      .muted {
+        @apply text-gray-500;
+      }
+      /* For small hero image overlay readability */
+      .hero-bg {
+        background-image: linear-gradient(
+            90deg,
+            rgba(6, 95, 70, 0.9),
+            rgba(34, 197, 94, 0.4)
+          ),
+          url("https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=8da5a3c0e6e3c3b7c86b2a4ef1f62f6d");
+        background-size: cover;
+        background-position: center;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-900">
+    <!-- Header -->
+    <header class="bg-white shadow sticky top-0 z-30">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-4">
+          <!-- Left: Logo + Site Name -->
+          <div class="flex items-center gap-4">
+            <!-- Logo -->
+            <img
+              src="logo.png"
+              alt="KrishiSetu Logo"
+              class="h-10 w-10 rounded-full shadow"
+            />
+
+            <!-- Site Name + Tagline -->
+            <div>
+              <div class="text-lg font-semibold" data-i18n="KrishiSetu">
+                KrishiSetu
+              </div>
+              <div class="text-xs text-gray-500" data-i18n="KrishiSetu">
+                AI crop recommendation • Market connect • Farmer learning
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Navigation + Language + Login -->
+          <div class="flex items-center gap-3">
+            <!-- Nav Links -->
+            <div class="hidden sm:flex sm:items-center sm:gap-4">
+              <nav class="flex gap-3 text-sm font-medium text-gray-700">
+                <a
+                  href="#learn"
+                  class="hover:text-green-700"
+                  data-i18n="navLearn"
+                  >Learn</a
+                >
+                <a
+                  href="https://manas0412-crop-recommendation.hf.space/"
+                  class="hover:text-green-700"
+                  data-i18n="navRecommend"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Crop Recommendation</a
+                >
+                <a
+                  href="Rate.html"
+                  class="hover:text-green-700"
+                  data-i18n="navRates"
+                  >Rates</a
+                >
+                <a
+                  href="Farmers.html"
+                  class="hover:text-green-700"
+                  data-i18n="navFarmer"
+                  >Farmers</a
+                >
+                <a
+                  href="Experts.html"
+                  class="hover:text-green-700"
+                  data-i18n="navExperts"
+                  >Experts</a
+                >
+                <a
+                  href="https://manas0412-crop-disease-detection.hf.space/"
+                  class="hover:text-green-700"
+                  data-i18n="navDisease"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Disease Detection</a
+                >
+              </nav>
+            </div>
+
+            <!-- Language Switch + Login -->
+            <div class="flex items-center gap-3">
+              <select
+                id="lang"
+                class="border rounded-md p-1 text-sm focus:ring-green-500 focus:border-green-500"
+                aria-label="Language selector"
+              >
+                <option value="en">English</option>
+                <option value="hi">हिंदी</option>
+                <option value="od">ଓଡ଼ିଆ</option>
+                <option value="bn">বাংলা</option>
+                <option value="te">తెలుగు</option>
+              </select>
+
+              <a
+                href="Account.html"
+                class="px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md text-sm font-medium transition"
+                data-i18n="AccountBtn"
+              >
+                Account
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero-bg text-white py-16">
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-8"
+      >
+        <div class="md:w-2/3">
+          <h1
+            class="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight"
+            data-i18n="heroTitle"
+          >
+            AI-Based Crop Recommendation & Market Connect
+          </h1>
+          <p class="mt-4 text-lg muted" data-i18n="heroSubtitle">
+            Helping farmers grow smarter, forecast prices, and connect to nearby
+            buyers.
+          </p>
+
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a
+              href="https://manas0412-crop-recommendation.hf.space/"
+              class="px-5 py-3 bg-white text-green-700 rounded-md font-semibold shadow"
+              data-i18n="ctaRecommend"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Get Recommendation</a
+            >
+            <a
+              href="#rates"
+              class="px-5 py-3 border border-white rounded-md text-white"
+              data-i18n="ctaRates"
+              >View Govt. Rates</a
+            >
+            <a
+              href="#vendors"
+              class="px-5 py-3 bg-green-800/80 rounded-md text-white"
+              data-i18n="ctaVendors"
+              >Find Nearby Vendors</a
+            >
+          </div>
+
+          <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="bg-white/10 rounded p-3">
+              <div class="text-sm muted" data-i18n="heroFeature1Title">
+                Daily Tip
+              </div>
+              <div class="font-semibold" id="heroTip">
+                Use drip irrigation to save water and increase yield.
+              </div>
+            </div>
+            <div class="bg-white/10 rounded p-3">
+              <div class="text-sm muted" data-i18n="heroFeature2Title">
+                Today's Highlight
+              </div>
+              <div class="font-semibold" id="heroHighlight">
+                Vermicompost training — free webinar at 4 PM
+              </div>
+            </div>
+            <div class="bg-white/10 rounded p-3">
+              <div class="text-sm muted" data-i18n="heroFeature3Title">
+                Toll-Free
+              </div>
+              <div class="font-semibold">1800-123-456</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="md:w-1/3">
+          <div class="card">
+            <div class="text-sm muted" data-i18n="quickTitle">
+              Quick Actions
+            </div>
+            <div class="mt-3 flex flex-col gap-2">
+              <a
+                href="https://manas0412-crop-recommendation.hf.space/"
+                class="block text-center py-2 bg-green-600 text-white rounded"
+                data-i18n="quickRec"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Start Recommendation</a
+              >
+              <a
+                href="#rates"
+                class="block text-center py-2 border border-green-600 rounded"
+                data-i18n="quickRates"
+                >Open Rate Chart</a
+              >
+              <a
+                href="#learn"
+                class="block text-center py-2 bg-white text-green-700 rounded"
+                data-i18n="quickLearn"
+                >Open Learning Hub</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-10">
+      <!-- Farming & Learning Section -->
+      <section id="learn" class="mb-10">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-2xl font-semibold" data-i18n="learnHeading">
+            Farming & Learning
+          </h2>
+          <div class="text-sm muted">All content in 5 languages</div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Guides -->
+          <div class="card">
+            <h3 class="font-semibold mb-2" data-i18n="guidesTitle">Guides</h3>
+            <p class="muted mb-4" data-i18n="guidesDesc">
+              Short, actionable guides for crop cultivation, soil health and
+              pest control.
+            </p>
+            <ul class="space-y-3">
+              <li>
+                <a href="#guide-paddy" class="block hover:underline">
+                  <div class="font-medium" data-i18n="guidePaddyTitle">
+                    Paddy Cultivation — Low Water Methods
+                  </div>
+                  <div class="text-sm muted" data-i18n="guidePaddyDesc">
+                    Sowing to harvest — step-by-step.
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="#guide-veg" class="block hover:underline">
+                  <div class="font-medium" data-i18n="guideVegTitle">
+                    Vegetable Care — Tomatoes & Okra
+                  </div>
+                  <div class="text-sm muted" data-i18n="guideVegDesc">
+                    Fertilizer, pest control, and harvest tips.
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a href="#guide-soil" class="block hover:underline">
+                  <div class="font-medium" data-i18n="guideSoilTitle">
+                    Soil Health & Testing
+                  </div>
+                  <div class="text-sm muted" data-i18n="guideSoilDesc">
+                    How to test at home & interpret results.
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Video + Tip of the Day -->
+          <div class="card">
+            <h3 class="font-semibold mb-2" data-i18n="videoTitle">
+              Video Tutorials
+            </h3>
+            <p class="muted mb-4" data-i18n="videoDesc">
+              Short lessons in local languages. Watch and learn.
+            </p>
+
+            <!-- Replace VIDEO_ID with your YouTube video ID(s). -->
+            <div class="mb-4 aspect-video">
+              <iframe
+                id="learnVideo"
+                class="w-full h-full rounded"
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=PQEzhstWsCNO4RkZ"
+                title="Learn farming"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen
+              >
+              </iframe>
+            </div>
+
+            <div class="mt-2">
+              <h4 class="font-medium" data-i18n="tipOfDayTitle">
+                Tip of the Day
+              </h4>
+              <p id="tipOfDay" class="mt-1 text-sm muted">
+                Rotate crops each season to reduce pests and maintain soil
+                fertility.
+              </p>
+            </div>
+          </div>
+
+          <!-- Success Stories carousel (simple) -->
+          <div class="card">
+            <h3 class="font-semibold mb-2" data-i18n="storiesTitle">
+              Success Stories
+            </h3>
+            <div id="stories" class="space-y-4">
+              <!-- JS will populate -->
+            </div>
+            <div class="mt-4 flex gap-2">
+              <button id="prevStory" class="px-3 py-1 border rounded muted">
+                ‹
+              </button>
+              <button id="nextStory" class="px-3 py-1 border rounded muted">
+                ›
+              </button>
+              <a
+                href="#community"
+                class="ml-auto text-sm text-green-600"
+                data-i18n="joinCommunity"
+                >Join Community</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Govt Rate Snapshot & Chart -->
+      <section id="rates" class="mb-10">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-2xl font-semibold" data-i18n="ratesHeading">
+            Government Rate Snapshot
+          </h2>
+          <div class="text-sm muted" data-i18n="ratesSub">
+            Updated daily • Simple prediction preview
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Chart -->
+          <div class="lg:col-span-2 card">
+            <div class="flex items-center justify-between mb-3">
+              <div>
+                <div class="text-sm muted" data-i18n="chartTitle">
+                  Market price trend (last 7 days)
+                </div>
+                <div class="font-semibold" id="chartCrop">Tomato</div>
+              </div>
+              <div class="flex items-center gap-2">
+                <select id="chartCropSelect" class="border rounded p-1 text-sm">
+                  <!-- Populated by JS -->
+                </select>
+                <button
+                  id="refreshRates"
+                  class="px-3 py-1 bg-green-600 text-white rounded text-sm"
+                  data-i18n="refreshBtn"
+                >
+                  Refresh
+                </button>
+              </div>
+            </div>
+            <canvas id="ratesChart" height="140"></canvas>
+          </div>
+
+          <!-- Key crops rates summary -->
+          <div class="card">
+            <h3 class="font-semibold mb-3" data-i18n="quickRatesTitle">
+              Quick Rates
+            </h3>
+            <div id="quickRatesList" class="space-y-3">
+              <!-- JS fills rows -->
+            </div>
+            <div class="mt-4">
+              <small class="muted" data-i18n="ratesNote"
+                >Note: Use the API key from govt portal. Replace demo data with
+                live API.</small
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Vendors & Storage -->
+      <section id="vendors" class="mb-10">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-2xl font-semibold" data-i18n="vendorsHeading">
+            Nearby Vendors & Storage
+          </h2>
+          <div class="text-sm muted" data-i18n="vendorsSub">
+            Search by pincode / village
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="card lg:col-span-2">
+            <div class="flex gap-3 mb-4">
+              <input
+                id="vendorQuery"
+                class="flex-1 rounded border p-2"
+                placeholder="Enter pincode or village"
+              />
+              <button
+                id="searchVendors"
+                class="px-4 py-2 bg-green-600 text-white rounded"
+              >
+                Search
+              </button>
+            </div>
+            <div id="vendorResults" class="space-y-4">
+              <!-- Stub results. In production, populate using backend or Google Maps Places -->
+              <div class="p-3 rounded border">
+                <div class="font-semibold">Local Go-down — Village Store</div>
+                <div class="muted text-sm">
+                  Capacity: 20 MT · Contact: 98765 43210
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="font-semibold mb-3" data-i18n="vendorMapTitle">
+              Map (preview)
+            </h3>
+            <div
+              class="bg-gray-100 rounded h-48 flex items-center justify-center muted"
+            >
+              Map placeholder — integrate Google Maps or Leaflet here
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Experts -->
+      <section id="experts" class="mb-12">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-2xl font-semibold" data-i18n="expertsHeading">
+            Expert Support
+          </h2>
+          <div class="text-sm muted" data-i18n="expertsSub">
+            Book a consultant for field-level advice
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Example experts -->
+          <div class="card">
+            <div class="font-semibold">Dr. Anil Kumar</div>
+            <div class="muted text-sm">Soil & Water Specialist</div>
+            <div class="mt-3 flex gap-2">
+              <button
+                class="flex-1 px-3 py-2 border rounded"
+                data-i18n="viewProfile"
+              >
+                Profile
+              </button>
+              <button
+                class="flex-1 px-3 py-2 bg-green-600 text-white rounded"
+                data-i18n="bookConsult"
+              >
+                Book
+              </button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="font-semibold">Ms. Sita R.</div>
+            <div class="muted text-sm">Organic Farming Expert</div>
+            <div class="mt-3 flex gap-2">
+              <button
+                class="flex-1 px-3 py-2 border rounded"
+                data-i18n="viewProfile"
+              >
+                Profile
+              </button>
+              <button
+                class="flex-1 px-3 py-2 bg-green-600 text-white rounded"
+                data-i18n="bookConsult"
+              >
+                Book
+              </button>
+            </div>
+          </div>
+          <!-- add more experts -->
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t py-6">
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4"
+      >
+        <div>
+          <div class="font-semibold" data-i18n="footerBrand">
+            Smart Agri Connect
+          </div>
+          <div class="muted text-sm" data-i18n="footerCopy">
+            © 2025 • Toll-free: 1800-123-456 • privacy • terms
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <a href="#" class="muted hover:underline">Facebook</a>
+          <a href="#" class="muted hover:underline">Whatsapp</a>
+          <a href="#" class="muted hover:underline">YouTube</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ---------- SCRIPTS ---------- -->
+    <script>
+      /* =========================
+       Multilingual content (5 languages)
+       Each key maps to text nodes with data-i18n attributes or element IDs
+       For dynamic nodes we target by id; for static text nodes we use data-i18n
+       ========================= */
+      const TRANSLATIONS = {
+        en: {
+          siteName: "Smart Agri Connect",
+          siteTag: "AI crop recommendation • Market connect • Farmer learning",
+          heroTitle: "AI-Based Crop Recommendation & Market Connect",
+          heroSubtitle:
+            "Helping farmers grow smarter, forecast prices, and connect to nearby buyers.",
+          ctaRecommend: "Get Recommendation",
+          ctaRates: "View Govt. Rates",
+          ctaVendors: "Find Nearby Vendors",
+          heroFeature1Title: "Daily Tip",
+          heroFeature2Title: "Today\u2019s Highlight",
+          heroFeature3Title: "Toll-Free",
+          quickTitle: "Quick Actions",
+          quickRec: "Start Recommendation",
+          quickRates: "Open Rate Chart",
+          quickLearn: "Open Learning Hub",
+          learnHeading: "Farming & Learning",
+          guidesTitle: "Guides",
+          guidesDesc:
+            "Short, actionable guides for crop cultivation, soil health and pest control.",
+          guidePaddyTitle: "Paddy Cultivation — Low Water Methods",
+          guidePaddyDesc: "Sowing to harvest — step-by-step.",
+          guideVegTitle: "Vegetable Care — Tomatoes & Okra",
+          guideVegDesc: "Fertilizer, pest control, and harvest tips.",
+          guideSoilTitle: "Soil Health & Testing",
+          guideSoilDesc: "How to test at home & interpret results.",
+          videoTitle: "Video Tutorials",
+          videoDesc: "Short lessons in local languages. Watch and learn.",
+          tipOfDayTitle: "Tip of the Day",
+          storiesTitle: "Success Stories",
+          joinCommunity: "Join Community",
+          ratesHeading: "Government Rate Snapshot",
+          ratesSub: "Updated daily • Simple prediction preview",
+          chartTitle: "Market price trend (last 7 days)",
+          refreshBtn: "Refresh",
+          quickRatesTitle: "Quick Rates",
+          ratesNote:
+            "Note: Use the API key from govt portal. Replace demo data with live API.",
+          vendorsHeading: "Nearby Vendors & Storage",
+          vendorsSub: "Search by pincode / village",
+          vendorMapTitle: "Map (preview)",
+          expertsHeading: "Expert Support",
+          expertsSub: "Book a consultant for field-level advice",
+          viewProfile: "Profile",
+          bookConsult: "Book",
+          footerBrand: "Smart Agri Connect",
+          footerCopy: "\u00A9 2025 • Toll-free: 1800-123-456 • privacy • terms",
+          navLearn: "Learn",
+          navRecommend: "Recommend",
+          navRates: "Rates",
+          navVendors: "Vendors",
+          navExperts: "Experts",
+          navDisease: "Disease Detection",
+          loginBtn: "Login",
+        },
+        hi: {
+          siteName: "स्मार्ट एग्री कनेक्ट",
+          siteTag: "AI-आधारित फसल सिफारिश • बाजार कनेक्ट • किसान सीखना",
+          heroTitle: "एआई आधारित फसल सिफारिश और बाजार संपर्क",
+          heroSubtitle:
+            "किसानों को स्मार्ट ढंग से उगाने, कीमत अनुमान और खरीदारों से जोड़ने में मदद।",
+          ctaRecommend: "फसल सिफारिश",
+          ctaRates: "सरकारी दरें देखें",
+          ctaVendors: "नजदीकी विक्रेता ढूंढें",
+          heroFeature1Title: "दैनिक सुझाव",
+          heroFeature2Title: "आज की जानकारी",
+          heroFeature3Title: "टोल-फ्र�",
+          quickTitle: "त्वरित क्रियाएँ",
+          quickRec: "सिफारिश प्रारंभ करें",
+          quickRates: "दर चार्ट खोलें",
+          quickLearn: "लर्निंग हब खोलें",
+          learnHeading: "खेती और सीखना",
+          guidesTitle: "गाइड",
+          guidesDesc:
+            "फसल, मिट्टी स्वास्थ्य और कीट नियंत्रण के लिए संक्षिप्त मार्गदर्शक।",
+          guidePaddyTitle: "धान खेती — कम पानी विधियाँ",
+          guidePaddyDesc: "बुवाई से कटाई — कदम दर कदम।",
+          guideVegTitle: "सब्जी देखभाल — टमाटर और भिंडी",
+          guideVegDesc: "उर्वरक, कीट नियंत्रण और कटाई सुझाव।",
+          guideSoilTitle: "मिट्टी स्वास्थ्य और परीक्षण",
+          guideSoilDesc: "घर पर परीक्षण और परिणाम समझना।",
+          videoTitle: "वीडियो ट्यूटोरियल",
+          videoDesc: "स्थानीय भाषाओं में संक्षिप्त पाठ।",
+          tipOfDayTitle: "आज का सुझाव",
+          storiesTitle: "सफलता की कहानियाँ",
+          joinCommunity: "समुदाय में शामिल हों",
+          ratesHeading: "सरकारी दर सारांश",
+          ratesSub: "दैनिक अपडेट • सरल पूर्वानुमान",
+          chartTitle: "बाजार मूल्य रुझान (पिछले 7 दिन)",
+          refreshBtn: "रीफ़्रेश",
+          quickRatesTitle: "त्वरित दरें",
+          ratesNote: "नोट: लाइव API के लिए सरकारी पोर्टल API की आवश्यकता।",
+          vendorsHeading: "नजदीकी विक्रेता और गोदाम",
+          vendorsSub: "पिनकोड / गाँव से खोजें",
+          vendorMapTitle: "नक्शा (पूर्वावलोकन)",
+          expertsHeading: "विशेषज्ञ सहायता",
+          expertsSub: "मैदान-स्तरीय सलाह के लिए सलाहकार बुक करें",
+          viewProfile: "प्रोफ़ाइल",
+          bookConsult: "बुक करें",
+          footerBrand: "स्मार्ट एग्री कनेक्ट",
+          footerCopy: "\u00A9 2025 • टोल-फ्री: 1800-123-456 • गोपनीयता • नियम",
+          navLearn: "सीखें",
+          navRecommend: "सिफारिश",
+          navRates: "दरें",
+          navVendors: "विक्रेता",
+          navExperts: "विशेषज्ञ",
+          navDisease: "रोग पहचान",
+          loginBtn: "लॉगिन",
+        },
+        od: {
+          siteName: "ସ୍ମାର୍ଟ ଏଗ୍ରି କନେକ୍ଟ",
+          siteTag: "AI ଆଧାରିତ ଫସଲ ପରାମର୍ଶ • ମାର୍କେଟ୍ କନେକ୍ଟ • ଚାଷୀ ଶିକ୍ଷା",
+          heroTitle: "AI ଭିତ୍ତିକ ଫସଲ ପରାମର୍ଶ ଓ ବଜାର ସଂଯୋଗ",
+          heroSubtitle:
+            "ଚାଷୀଙ୍କୁ ଜ୍ଞାନ ଦେଇ ପ୍ରସ୍ତୁତ କରିବା, ମୂଲ୍ୟ ଅନୁମାନ ଓ ବିକ୍ରେତାଙ୍କ ସହିତ ଯୋଡ଼ିବା।",
+          ctaRecommend: "ଫସଲ ପରାମର୍ଶ",
+          ctaRates: "ସରକାରୀ ଦର ଦେଖନ୍ତୁ",
+          ctaVendors: "ନିକଟସ୍ଥ ବିକ୍ରେତା ଖୋଜନ୍ତୁ",
+          heroFeature1Title: "ଦୈନିକ ସୁଚନା",
+          heroFeature2Title: "ଆଜିର ମୁଖ୍ୟ",
+          heroFeature3Title: "ଟୋଲ୍-ଫ୍ରୀ",
+          quickTitle: "ତ୍ୱରିତ କାର୍ୟ",
+          quickRec: "ପରାମର୍ଶ ଆରମ୍ଭ",
+          quickRates: "ଦର ଖୋଲନ୍ତୁ",
+          quickLearn: "ଲର୍ଣ୍ଣିଙ୍ଗ ଖୋଲନ୍ତୁ",
+          learnHeading: "କୃଷି ଓ ଶିଖଣ",
+          guidesTitle: "ଗାଇଡ୍",
+          guidesDesc: "ଫସଲ, ମୃଦା ଓ ପୋକା ନିୟନ୍ତ୍ରଣ ପାଇଁ ସଂକ୍ଷିପ୍ତ ଗାଇଡ୍।",
+          guidePaddyTitle: "ଧାନ ଚାଷ — କମ୍ ପାଣି ବିଧି",
+          guidePaddyDesc: "ରୋପଣ ଠାରୁ କାଟଣା ପର୍ଯ୍ୟନ୍ତ।",
+          guideVegTitle: "ସବ୍ଜି ଯତ୍ନ — ଟମାଟର୍ & ଭିଣ୍ଡି",
+          guideVegDesc: "ଉର୍ବରକ, ପୋକା ନିୟନ୍ତ୍ରଣ ଓ କାଟଣା।",
+          guideSoilTitle: "ମୃଦା ସ୍ୱାସ୍ଥ୍ୟ ଓ ପରୀକ୍ଷା",
+          guideSoilDesc: "ଘରେ କିପରି ପରୀକ୍ଷା କରିବେ।",
+          videoTitle: "ଭିଡିଓ ଟ୍ୟୁଟୋରିଆଲ",
+          videoDesc: "ସ୍ଥାନୀୟ ଭାଷାରେ ଛୋଟ ପାଠ।",
+          tipOfDayTitle: "ଦିନର ଟିପ୍ସ",
+          storiesTitle: "ସଫଳତା କାହାଣୀ",
+          joinCommunity: "ସମୁଦାୟ ଯୋଗଦିଅନ୍ତୁ",
+          ratesHeading: "ସରକାରୀ ଦର ସାରାଂଶ",
+          ratesSub: "ଦୈନିକ ଅପଡେଟ • ସରଳ ପୂର୍ବାନୁମାନ",
+          chartTitle: "ବଜାର ମୂଲ୍ୟ ପ୍ରବଣତା (ପିଛଲା 7 ଦିନ)",
+          refreshBtn: "ରିଫ୍ରେସ୍",
+          quickRatesTitle: "ଦ୍ରୁତ ଦର",
+          ratesNote: "ନୋଟ: ସରକାରୀ ପୋର୍ଟାଲ୍‌ରୁ API କି ଦ୍ୱାରା ଲାଇଭ୍ ଡାଟା ପାଇଁ।",
+          vendorsHeading: "ନିକଟସ୍ଥ ବିକ୍ରେତା ଓ ଗୋଡାମ",
+          vendorsSub: "ପିନକୋଡ୍ / ଗ୍ରାମ ଦ୍ୱାରା ଖୋଜନ୍ତୁ",
+          vendorMapTitle: "ନକ୍ଷା (ପ୍ରୀଭ୍ୟୁ)",
+          expertsHeading: "ପେଶାଦାର ସହାୟତା",
+          expertsSub: "କ୍ଷେତ୍ର ସ୍ତରରେ ସଳାହ ପାଇଁ ବୁକ୍ କରନ୍ତୁ",
+          viewProfile: "ପ୍ରୋଫାଇଲ୍",
+          bookConsult: "ବୁକ୍",
+          footerBrand: "ସ୍ମାର୍ଟ ଏଗ୍ରି କନେକ୍ଟ",
+          footerCopy:
+            "\u00A9 2025 • ଟୋଲ୍-ଫ୍ରି: 1800-123-456 • ପ୍ରାଇଭେସି • ନିୟମ",
+          navLearn: "ଶିଖ",
+          navRecommend: "ପରାମର୍ଶ",
+          navRates: "ଦର",
+          navVendors: "ବିକ୍ରେତା",
+          navExperts: "ପେଶାଦାର",
+          navDisease: "ରୋଗ ଚିହ୍ନଟ",
+          loginBtn: "ଲଗଇନ୍",
+        },
+        bn: {
+          siteName: "স্মার্ট এগ্রি কানেক্ট",
+          siteTag: "AI-ভিত্তিক ফসল সুপারিশ • বাজার কানেক্ট • কৃষক শেখা",
+          heroTitle: "এআই-ভিত্তিক ফসল সুপারিশ ও মার্কেট কানেক্ট",
+          heroSubtitle:
+            "কৃষকদের স্মার্টভাবে চাষ করতে, দাম পূর্বানুমান করতে ও ক্রেতাদের সঙ্গে যুক্ত হতে সহায়তা।",
+          ctaRecommend: "ফসল সুপারিশ",
+          ctaRates: "সরকারি দয় দেখুন",
+          ctaVendors: "নিকটস্থ বিক্রেতা খুঁজুন",
+          heroFeature1Title: "দৈনিক টিপস",
+          heroFeature2Title: "আজকের হাইলাইট",
+          heroFeature3Title: "টোল-ফ্রি",
+          quickTitle: "দ্রুত কার্য",
+          quickRec: "সুপারিশ শুরু করুন",
+          quickRates: "দাম চার্ট খুলুন",
+          quickLearn: "লর্নিং হাব খুলুন",
+          learnHeading: "কৃষি ও শেখা",
+          guidesTitle: "গাইড",
+          guidesDesc:
+            "ফসল, মাটি স্বাস্থ্য ও পোকা নিয়ন্ত্রণের জন্য সংক্ষিপ্ত গাইড।",
+          guidePaddyTitle: "ধান চাষ — কম পানির পদ্ধতি",
+          guidePaddyDesc: "বোনা থেকে কাটাছেঁড়া পর্যন্ত।",
+          guideVegTitle: "সবজি পরিচর্যা — টমেটো ও পুরি",
+          guideVegDesc: "সার, পোকা নিয়ন্ত্রণ ও কাটা টিপস।",
+          guideSoilTitle: "মাটি স্বাস্থ্য ও পরীক্ষা",
+          guideSoilDesc: "বাড়িতে কিভাবে পরীক্ষা করবেন।",
+          videoTitle: "ভিডিও টিউটোরিয়াল",
+          videoDesc: "স্থানীয় ভাষায় সংক্ষিপ্ত ক্লিপ।",
+          tipOfDayTitle: "আজকের টিপস",
+          storiesTitle: "সাফল্যের গল্প",
+          joinCommunity: "কমিউনিটিতে যোগ দিন",
+          ratesHeading: "সরকারি রেট স্ন্যাপশট",
+          ratesSub: "দৈনিক আপডেট • সরল পূর্বাভাস",
+          chartTitle: "বাজার মূল্য প্রবণতা (গত 7 দিন)",
+          refreshBtn: "রিফ্রেশ",
+          quickRatesTitle: "দ্রুত রেট",
+          ratesNote: "নোট: সরাসরি লাইভ ডেটার জন্য সরকারি API ব্যবহার করুন।",
+          vendorsHeading: "নিকটস্থ বিক্রেতা ও স্টোর",
+          vendorsSub: "পিনকোড / গ্রামে সন্ধান",
+          vendorMapTitle: "মানচিত্র (প্রাকদর্শন)",
+          expertsHeading: "বিশেষজ্ঞ সহায়তা",
+          expertsSub: "ক্ষেত্র স্তরের পরামর্শের জন্য বুক করুন",
+          viewProfile: "প্রোফাইল",
+          bookConsult: "বুক",
+          footerBrand: "স্মার্ট এগ্রি কানেক্ট",
+          footerCopy: "\u00A9 2025 • টোল-ফ্রি: 1800-123-456 • প্রাইভেসি • শর্ত",
+          navLearn: "শিখুন",
+          navRecommend: "সুপারিশ",
+          navRates: "রেট",
+          navVendors: "বিক্রেতা",
+          navExperts: "বিশেষজ্ঞ",
+          navDisease: "রোগ শনাক্তকরণ",
+          loginBtn: "লগইন",
+        },
+        te: {
+          siteName: "స్మార్ట్ అగ్రి కనెక్ట్",
+          siteTag: "AI ఆధారిత పంట సూచన • మార్కెట్ కనెక్ట్ • రైతు నేర్చుకోవడం",
+          heroTitle: "AI ఆధారిత పంట సూచన & మార్కెట్ కనెక్ట్",
+          heroSubtitle:
+            "రైతులు తెలివిగా పండించి ధరలను అంచనా వేయగలిగేలా మరియు కొనగొనేవారితో కలిపేలా సహాయం.",
+          ctaRecommend: "పంట సూచన",
+          ctaRates: "ప్రభుత్వ ధరలు చూడండి",
+          ctaVendors: "సమీప విక్రేతలను కనుగొనండి",
+          heroFeature1Title: "రోజువారీ సూచన",
+          heroFeature2Title: "ఈ రోజు ముఖ్యాంశం",
+          heroFeature3Title: "టోల్-ఫ్రీ",
+          quickTitle: "త్వరిత చర్యలు",
+          quickRec: "సూచన ప్రారంభించండి",
+          quickRates: "ధర చార్ట్ తెరవండి",
+          quickLearn: "లెర్నింగ్ హబ్ తెరవండి",
+          learnHeading: "వ్యవసాయం & నేర్చుకోవడం",
+          guidesTitle: "గైడ్లు",
+          guidesDesc:
+            "పంటలు, నేల ఆరోగ్యం మరియు క్రిమి నియంత్రణ కోసం సంక్షిప్త గైడ్‌లు.",
+          guidePaddyTitle: "బియ్యం సాగు — తక్కువ నీటి పద్ధతులు",
+          guidePaddyDesc: "విత్తనం నుండి పంట కోత వరకు.",
+          guideVegTitle: "కూరగాయలు సంరక్షణ — టమాటో & బెండ",
+          guideVegDesc: "ఎరువులు, క్రిమి నియంత్రణ & కోత సూచనలు.",
+          guideSoilTitle: "మట్టిస్వास्थ्य & పరీక్ష",
+          guideSoilDesc: "ఇంటి వద్ద పరీక్ష ఎలా చేయాలి.",
+          videoTitle: "వీడియో ట్యుటోరియల్స్",
+          videoDesc: "స్థానిక భాషలో చిన్న పాఠాలు.",
+          tipOfDayTitle: "రోజువారీ టిప్",
+          storiesTitle: "సక్సెస్ కథలు",
+          joinCommunity: "కమ్యూనిటీలో చేరండి",
+          ratesHeading: "ప్రభుత్వ రేట్ స్నాప్షాట్",
+          ratesSub: "రోజూ అప్డేట్ • సాఫ్ట్ ఫార్కాస్ట్",
+          chartTitle: "మార్కెట్ ధర ధోరణి (గత 7 రోజులు)",
+          refreshBtn: "రిఫ్రెష్",
+          quickRatesTitle: "క్విక్ రేట్స్",
+          ratesNote: "గమనిక: లైవ్ డేటా కోసం ప్రభుత్వ API ఉపయోగించండి.",
+          vendorsHeading: "సమీప విక్రేతలు & నిల్వలు",
+          vendorsSub: "పిన్‌కోడ్ / గ్రామం ద్వారా శోధించండి",
+          vendorMapTitle: " మ్యాప్ (ప్రీవ్యూఇ)",
+          expertsHeading: "నిపుణుల మద్దతు",
+          expertsSub: "ఫీల్డ్ స్థాయి సలహా బుక్ చేయండి",
+          viewProfile: "ప్రొఫైల్",
+          bookConsult: "బుక్",
+          footerBrand: "స్మార్ట్ అగ్రి కనెక్ట్",
+          footerCopy: "\u00A9 2025 • టోల్-ఫ్రీ: 1800-123-456 • గోప్యత • షరతులు",
+          navLearn: "ఇల్ర్న్",
+          navRecommend: "సిఫార్సు",
+          navRates: "రేట్స్",
+          navVendors: "విక్రేతలు",
+          navExperts: "నిపుణులు",
+          navDisease: "நோய் கண்டறிதல்",
+          loginBtn: "లాగిన్",
+        },
+      };
+
+      // Simple function: apply translations for elements using data-i18n attribute and certain ids
+      function applyTranslations(lang = "en") {
+        const dict = TRANSLATIONS[lang] || TRANSLATIONS.en;
+        // data-i18n elements
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          const key = el.getAttribute("data-i18n");
+          if (dict[key]) el.textContent = dict[key];
+        });
+        // some ids used for dynamic fields
+        const idKeys = ["siteName", "heroTitle", "heroSubtitle", "tipOfDay"];
+        idKeys.forEach((k) => {
+          if (dict[k] && document.getElementById(k))
+            document.getElementById(k).innerText = dict[k];
+        });
+        // Login button
+        const loginBtn = document.querySelector('[data-i18n="loginBtn"]');
+        if (loginBtn) loginBtn.textContent = dict.loginBtn || "Login";
+      }
+
+      // Language selector initialization
+      const langSelect = document.getElementById("lang");
+      const savedLang = localStorage.getItem("agri_lang") || "en";
+      langSelect.value = savedLang;
+      applyTranslations(savedLang);
+      langSelect.addEventListener("change", () => {
+        const v = langSelect.value;
+        localStorage.setItem("agri_lang", v);
+        applyTranslations(v);
+        rotateTip(v); // update tip language
+      });
+
+      /* =========================
+       Tip of the Day rotation (localized)
+       ========================= */
+      const TIPS = {
+        en: [
+          "Use drip irrigation to save water and increase yield.",
+          "Add vermicompost to improve soil fertility.",
+          "Check local forecast before sowing.",
+          "Rotate crops to reduce pests.",
+        ],
+        hi: [
+          "ड्रिप सिंचाई से पानी बचाएँ।",
+          "वर्मी कंपोस्ट मिलाएँ।",
+          "बुआई से पहले मौसम देखें।",
+          "कीटों से बचने के लिए फसल रोटेशन करें।",
+        ],
+        od: [
+          "ଡ୍ରିପ୍ ସିଂଚାଇ ଦ୍ୱାରା ଜଳ ବଚାନ୍ତୁ।",
+          "ଭର୍ମିକମ୍ପୋଷ୍ଟ ଯୋଗ କରନ୍ତୁ।",
+          "ବୀଜ ରୋପଣ ପୂର୍ବରୁ ପାଣିପାଗ ଯାଞ୍ଚ କରନ୍ତୁ।",
+          "କୀଟ ରୋକଥାମ ପାଇଁ ଫସଲ ରୋଟେସନ୍ କରନ୍ତୁ।",
+        ],
+        bn: [
+          "ড্রিপ সেচে পানি বাঁচান।",
+          "ভার্মি কম্পোস্ট যোগ করুন।",
+          "বপনের আগে আবহাওয়া দেখুন।",
+          "পোকামাকড় কমাতে ফসল ঘুরান।",
+        ],
+        te: [
+          "డ్రిప్ నీర్రేజనంతో నీరు బాచుకోండి.",
+          "వర్మికంపోస్ట్ జోడించండి.",
+          "నాటే ముందు వాతావరణాన్ని పరిశీలించండి.",
+          "పంట మార్పుచేసి పురుగుల నియంత్రణ చేయండి.",
+        ],
+      };
+
+      function rotateTip(lang = localStorage.getItem("agri_lang") || "en") {
+        const list = TIPS[lang] || TIPS.en;
+        const t = list[Math.floor(Math.random() * list.length)];
+        document.getElementById("heroTip").innerText = t;
+        document.getElementById("tipOfDay").innerText = t;
+        // rotate every 12 seconds in demo (increase to 86400000 for 24h)
+        clearTimeout(window._tipTimer);
+        window._tipTimer = setTimeout(() => rotateTip(lang), 12000);
+      }
+      rotateTip(savedLang);
+
+      /* =========================
+       Success Stories carousel (simple rotating card)
+       ========================= */
+      const STORIES = [
+        {
+          title: "Farmer Ramesh — Tomato yield +30%",
+          desc: "Used vermicompost and drip irrigation, selling directly to vendors.",
+        },
+        {
+          title: "Village Collective — Reduced transport cost",
+          desc: "Shared cold storage booking cut transport costs by 40%.",
+        },
+        {
+          title: "Ms. Latha — Organic certification",
+          desc: "Adopted organic methods and sold at premium rates.",
+        },
+      ];
+      let storyIndex = 0;
+      const storiesEl = document.getElementById("stories");
+      function renderStory(i) {
+        const s = STORIES[i];
+        storiesEl.innerHTML = `<div><div class="font-semibold">${s.title}</div><div class="muted text-sm">${s.desc}</div></div>`;
+      }
+      renderStory(storyIndex);
+      document.getElementById("prevStory").addEventListener("click", () => {
+        storyIndex = (storyIndex - 1 + STORIES.length) % STORIES.length;
+        renderStory(storyIndex);
+      });
+      document.getElementById("nextStory").addEventListener("click", () => {
+        storyIndex = (storyIndex + 1) % STORIES.length;
+        renderStory(storyIndex);
+      });
+      // auto rotate
+      setInterval(() => {
+        storyIndex = (storyIndex + 1) % STORIES.length;
+        renderStory(storyIndex);
+      }, 10000);
+
+      /* =========================
+       GOVT RATE Chart & Quick Rates
+       - sampleRates is demo data; you should replace with API fetch.
+       - See fetchGovtRates() stub to implement backend call.
+       ========================= */
+      // Sample demo data (last 7 days for a few crops)
+      const sampleRates = {
+        Tomato: {
+          last7: [20, 21, 22, 23, 22, 24, 23],
+          quick: { rate: 23, pred: 24 },
+        },
+        Potato: {
+          last7: [16, 17, 18, 17, 18, 19, 18],
+          quick: { rate: 18, pred: 19 },
+        },
+        Onion: {
+          last7: [30, 31, 32, 33, 32, 34, 33],
+          quick: { rate: 33, pred: 34 },
+        },
+        Rice: {
+          last7: [25, 25, 26, 26, 27, 28, 28],
+          quick: { rate: 28, pred: 29 },
+        },
+      };
+
+      // Populate crop selector and quick rates
+      const cropSelect = document.getElementById("chartCropSelect");
+      const quickRatesList = document.getElementById("quickRatesList");
+      function populateRatesUI() {
+        cropSelect.innerHTML = "";
+        quickRatesList.innerHTML = "";
+        Object.keys(sampleRates).forEach((crop, idx) => {
+          cropSelect.appendChild(new Option(crop, crop));
+          const el = document.createElement("div");
+          el.className = "flex justify-between items-center";
+          el.innerHTML = `<div class="font-medium">${crop}</div><div class="text-sm muted">₹ ${sampleRates[crop].quick.rate} • Pred ₹ ${sampleRates[crop].quick.pred}</div>`;
+          quickRatesList.appendChild(el);
+        });
+        // set chart label
+        document.getElementById("chartCrop").innerText =
+          cropSelect.value || Object.keys(sampleRates)[0];
+      }
+      populateRatesUI();
+
+      // Chart.js init
+      const ctx = document.getElementById("ratesChart").getContext("2d");
+      let ratesChart;
+      function renderChartFor(crop) {
+        const data = sampleRates[crop].last7;
+        const labels = data.map((_, i) => `D-${6 - i}`);
+        if (ratesChart) ratesChart.destroy();
+        ratesChart = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels,
+            datasets: [
+              {
+                label: crop + " (₹/kg)",
+                data,
+                fill: false,
+                tension: 0.3,
+                borderWidth: 2,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: true } },
+            scales: { y: { beginAtZero: false } },
+          },
+        });
+        document.getElementById("chartCrop").innerText = crop;
+      }
+      // initial render
+      renderChartFor(cropSelect.value || Object.keys(sampleRates)[0]);
+      cropSelect.addEventListener("change", (e) =>
+        renderChartFor(e.target.value)
+      );
+      document.getElementById("refreshRates").addEventListener("click", () => {
+        // In production: call fetchGovtRates() to update sampleRates then re-render.
+        refreshDemoRates();
+      });
+
+      function refreshDemoRates() {
+        // tiny demo change to show chart update
+        Object.keys(sampleRates).forEach((c) => {
+          const arr = sampleRates[c].last7;
+          const next = Math.max(
+            1,
+            Math.round(arr[arr.length - 1] * (1 + (Math.random() - 0.45) / 20))
+          );
+          arr.shift();
+          arr.push(next);
+          sampleRates[c].quick.rate = arr[arr.length - 1];
+          sampleRates[c].quick.pred = Math.round(
+            next * (1 + Math.random() * 0.06)
+          );
+        });
+        populateRatesUI();
+        renderChartFor(cropSelect.value);
+      }
+
+      // Example stub: how to fetch govt rates from backend
+      async function fetchGovtRatesFromBackend() {
+        // Backend should call the official govt/newspaper API and return JSON:
+        // [{ crop: 'Tomato', last7:[...], quick: {rate:XX, pred:YY} }, ... ]
+        // Example:
+        // const res = await fetch('/api/govt-rates');
+        // const json = await res.json();
+        // then update sampleRates accordingly and call populateRatesUI() and renderChartFor(...)
+        //
+        // Implement server-side caching and API keys.
+      }
+
+      /* =========================
+       Vendors search stub
+       ========================= */
+      document.getElementById("searchVendors").addEventListener("click", () => {
+        const q = document.getElementById("vendorQuery").value.trim();
+        if (!q) {
+          alert("Please enter pincode or village");
+          return;
+        }
+        // In production: call backend endpoint or Google Maps Places API
+        const results = [
+          {
+            name: "Village Cold Storage",
+            cap: "50 MT",
+            contact: "9876543210",
+            dist: "5 km",
+          },
+          {
+            name: "Local Go-down",
+            cap: "20 MT",
+            contact: "9123456780",
+            dist: "3 km",
+          },
+        ];
+        const container = document.getElementById("vendorResults");
+        container.innerHTML = "";
+        results.forEach((r) => {
+          const el = document.createElement("div");
+          el.className = "p-3 rounded border";
+          el.innerHTML = `<div class="font-semibold">${r.name}</div><div class="muted text-sm">Capacity: ${r.cap} · Contact: ${r.contact} · ${r.dist}</div>`;
+          container.appendChild(el);
+        });
+      });
+
+      /* =========================
+       Small accessibility: keyboard focus styles via JS (optional)
+       ========================= */
+      document.addEventListener("keyup", (e) => {
+        if (e.key === "Escape") {
+          // close modals if any (not implemented in demo)
+        }
+      });
+
+      /* =========================
+       Initial apply local language to other static data nodes
+       ========================= */
+      applyTranslations(savedLang);
+
+      // DONE
+    </script>
+  </body>
+</html>

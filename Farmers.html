@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KrishiSetu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+  <!-- Header -->
+  <header class="bg-green-700 text-white py-4 shadow">
+    <div class="max-w-7xl mx-auto px-4 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <img src="logo.png" alt="KrishiSetu" class="h-10 w-10 rounded-full object-cover" onerror="this.style.display='none'">
+        <h1 class="text-2xl font-bold">KrishiSetu</h1>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <input id="searchPin" placeholder="Search by PIN code or name" class="px-3 py-2 rounded-md text-black border" />
+        <button id="btnShowAll" class="px-3 py-2 bg-white text-green-700 rounded-md font-semibold">Show All</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    <!-- Farmers list -->
+    <section class="lg:col-span-2">
+      <h2 class="text-xl font-bold mb-4">Nearby Farmers</h2>
+      <div id="farmerList" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+    </section>
+
+    <!-- Communication panel -->
+    <aside class="bg-white rounded-lg shadow p-4 sticky top-6 h-[calc(100vh-96px)] overflow-auto">
+      <div id="commHeader" class="mb-4">
+        <h3 class="text-lg font-semibold text-green-700">Communication Panel</h3>
+        <p id="selectedFarmerLabel" class="text-sm text-gray-600">No farmer selected</p>
+      </div>
+
+      <!-- Chat -->
+      <div class="mb-4">
+        <div class="border rounded-md h-64 p-3 overflow-y-auto bg-gray-50" id="chatBox">
+          <p class="text-sm text-gray-500">Select a farmer to start chatting.</p>
+        </div>
+
+        <div class="mt-2 flex gap-2">
+          <input id="chatInput" class="flex-1 border rounded-md px-3 py-2" placeholder="Type a message..." />
+          <button id="sendBtn" class="px-3 py-2 bg-green-600 text-white rounded-md">Send</button>
+        </div>
+      </div>
+
+      <!-- Voice Call -->
+      <div class="mb-4">
+        <h4 class="font-semibold mb-2">📞 Voice Call</h4>
+        <div class="flex gap-2">
+          <button id="startVoiceBtn" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-md">Start Voice</button>
+          <button id="stopVoiceBtn" class="flex-1 px-3 py-2 bg-red-500 text-white rounded-md" disabled>Stop Voice</button>
+        </div>
+      </div>
+
+      <!-- Video Call -->
+      <div class="mb-4">
+        <h4 class="font-semibold mb-2">📹 Video Call (local preview)</h4>
+        <div class="flex gap-2 mb-2">
+          <button id="startVideoBtn" class="flex-1 px-3 py-2 bg-green-600 text-white rounded-md">Start Video</button>
+          <button id="stopVideoBtn" class="flex-1 px-3 py-2 bg-red-500 text-white rounded-md" disabled>Stop Video</button>
+        </div>
+
+        <div id="videoPreview" class="grid grid-cols-1 gap-2">
+          <video id="localVideo" autoplay muted playsinline class="w-full rounded-md bg-black hidden"></video>
+        </div>
+      </div>
+
+      <!-- Quick call -->
+      <div>
+        <h4 class="font-semibold mb-2">📲 Quick Call</h4>
+        <p class="text-sm text-gray-600 mb-2">You can directly call the farmer's phone using a phone-capable device.</p>
+        <a id="telLink" class="inline-block px-3 py-2 bg-blue-600 text-white rounded-md disabled:opacity-50" href="#" onclick="return false">Call Farmer</a>
+      </div>
+
+      <hr class="my-3">
+
+      <p class="text-xs text-gray-500">Notes: Voice/video use local media only. For real two-way calls, integrate a signaling server (WebSocket/Socket.IO) + WebRTC peer connections. Chat currently uses localStorage for demo persistence.</p>
+    </aside>
+  </div>
+
+  <script>
+    /***** Data: 30 demo farmers *****/
+    const farmers = [
+      { id: "F001", name: "Ramesh Kumar", phone: "9876500001", type: "Fruit Farmer", produce: ["Mango","Guava","Jackfruit"], pin: "751001" },
+      { id: "F002", name: "Suresh Das", phone: "9876500002", type: "Fruit Farmer", produce: ["Banana","Papaya"], pin: "751002" },
+      { id: "F003", name: "Arun Patel", phone: "9876500003", type: "Fruit Farmer", produce: ["Apple","Pear"], pin: "751003" },
+      { id: "F004", name: "Prakash Naik", phone: "9876500004", type: "Fruit Farmer", produce: ["Orange","Pomegranate"], pin: "751004" },
+      { id: "F005", name: "Vijay Singh", phone: "9876500005", type: "Fruit Farmer", produce: ["Mango","Lychee"], pin: "751005" },
+      { id: "F006", name: "Amit Sahu", phone: "9876500006", type: "Fruit Farmer", produce: ["Grapes","Kiwi"], pin: "751006" },
+      { id: "F007", name: "Deepak Yadav", phone: "9876500007", type: "Fruit Farmer", produce: ["Pineapple","Papaya"], pin: "751007" },
+      { id: "F008", name: "Manoj Kumar", phone: "9876500008", type: "Fruit Farmer", produce: ["Pomegranate","Guava"], pin: "751008" },
+      { id: "F009", name: "Kiran Behera", phone: "9876500009", type: "Fruit Farmer", produce: ["Watermelon","Melon"], pin: "751009" },
+      { id: "F010", name: "Rajesh Reddy", phone: "9876500010", type: "Fruit Farmer", produce: ["Strawberry","Cherry"], pin: "751010" },
+
+      { id: "V011", name: "Sanjay Jena", phone: "9876500011", type: "Vegetable Farmer", produce: ["Tomato","Capsicum"], pin: "751011" },
+      { id: "V012", name: "Bikash Panda", phone: "9876500012", type: "Vegetable Farmer", produce: ["Potato","Onion"], pin: "751012" },
+      { id: "V013", name: "Rohit Pradhan", phone: "9876500013", type: "Vegetable Farmer", produce: ["Brinjal","Ladyfinger"], pin: "751013" },
+      { id: "V014", name: "Anil Kumar", phone: "9876500014", type: "Vegetable Farmer", produce: ["Onion","Garlic"], pin: "751014" },
+      { id: "V015", name: "Kishore Sen", phone: "9876500015", type: "Vegetable Farmer", produce: ["Cabbage","Cauliflower"], pin: "751015" },
+      { id: "V016", name: "Ajay Mehta", phone: "9876500016", type: "Vegetable Farmer", produce: ["Carrot","Beetroot"], pin: "751016" },
+      { id: "V017", name: "Naveen Rao", phone: "9876500017", type: "Vegetable Farmer", produce: ["Green Beans","Peas"], pin: "751017" },
+      { id: "V018", name: "Ravi Shankar", phone: "9876500018", type: "Vegetable Farmer", produce: ["Spinach","Fenugreek"], pin: "751018" },
+      { id: "V019", name: "Mohit Sharma", phone: "9876500019", type: "Vegetable Farmer", produce: ["Pumpkin","Radish"], pin: "751019" },
+      { id: "V020", name: "Ashok Patra", phone: "9876500020", type: "Vegetable Farmer", produce: ["Cucumber","Sweet Corn"], pin: "751020" },
+
+      { id: "F021", name: "Ganesh Swain", phone: "9876500021", type: "Fruit Farmer", produce: ["Lychee","Custard Apple"], pin: "751021" },
+      { id: "F022", name: "Harish Nayak", phone: "9876500022", type: "Fruit Farmer", produce: ["Coconut","Dates"], pin: "751022" },
+      { id: "F023", name: "Raju Patel", phone: "9876500023", type: "Fruit Farmer", produce: ["Pear","Plum"], pin: "751023" },
+      { id: "F024", name: "Lokesh Behera", phone: "9876500024", type: "Fruit Farmer", produce: ["Dragon Fruit","Kiwi"], pin: "751024" },
+      { id: "V025", name: "Sunil Reddy", phone: "9876500025", type: "Vegetable Farmer", produce: ["Bitter Gourd","Bottle Gourd"], pin: "751025" },
+      { id: "V026", name: "Akhilesh Das", phone: "9876500026", type: "Vegetable Farmer", produce: ["Drumstick","Green Chilli"], pin: "751026" },
+      { id: "V027", name: "Satyam Panda", phone: "9876500027", type: "Vegetable Farmer", produce: ["Beans","Okra"], pin: "751027" },
+      { id: "V028", name: "Devendra Sahu", phone: "9876500028", type: "Vegetable Farmer", produce: ["Radish","Carrot"], pin: "751028" },
+      { id: "V029", name: "Suraj Mohanty", phone: "9876500029", type: "Vegetable Farmer", produce: ["Lady Finger","Spinach"], pin: "751029" },
+      { id: "V030", name: "Leela Roy", phone: "9876500030", type: "Fruit Farmer", produce: ["Apple","Cherry"], pin: "751030" }
+    ];
+
+    /***** UI references *****/
+    const farmerListEl = document.getElementById('farmerList');
+    const searchInput = document.getElementById('searchPin');
+    const showAllBtn = document.getElementById('btnShowAll');
+    const selectedFarmerLabel = document.getElementById('selectedFarmerLabel');
+    const chatBox = document.getElementById('chatBox');
+    const chatInput = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const telLink = document.getElementById('telLink');
+
+    let selectedFarmerId = null;
+    // messages per farmer stored in localStorage as object: { farmerId: [{from:'vendor'|'farmer', text, ts}] }
+    const storageKey = 'ks_vendor_chat_v1';
+    function loadMessages() {
+      try { return JSON.parse(localStorage.getItem(storageKey)) || {}; } catch(e){ return {}; }
+    }
+    function saveMessages(obj){ localStorage.setItem(storageKey, JSON.stringify(obj)); }
+
+    /***** Render farmer cards *****/
+    function renderFarmers(list){
+      farmerListEl.innerHTML = '';
+      if(!list.length){
+        farmerListEl.innerHTML = '<p class="text-gray-600">No farmers found.</p>';
+        return;
+      }
+      list.forEach(f => {
+        const card = document.createElement('div');
+        card.className = 'bg-white p-4 rounded-lg shadow flex flex-col';
+        card.innerHTML = `
+          <div class="flex items-start gap-3">
+            <div class="h-12 w-12 bg-green-100 rounded-full flex items-center justify-center text-green-700 font-semibold">${f.name.split(' ').map(n=>n[0]).slice(0,2).join('')}</div>
+            <div class="flex-1">
+              <div class="flex justify-between items-start gap-2">
+                <div>
+                  <h3 class="text-lg font-semibold">${f.name}</h3>
+                  <p class="text-sm text-gray-600">Reg: ${f.id} • PIN: ${f.pin}</p>
+                </div>
+                <div class="text-right">
+                  <p class="text-sm font-medium text-gray-700">${f.type}</p>
+                  <p class="text-sm text-gray-500">☎ ${f.phone}</p>
+                </div>
+              </div>
+              <p class="mt-2 text-sm text-gray-700"><strong>Produce:</strong> ${f.produce.join(', ')}</p>
+            </div>
+          </div>
+          <div class="mt-3 flex gap-2">
+            <button class="flex-1 px-3 py-2 bg-green-600 text-white rounded-md btn-chat" data-id="${f.id}">Chat</button>
+            <button class="px-3 py-2 bg-blue-600 text-white rounded-md btn-call" data-phone="${f.phone}">Call</button>
+            <button class="px-3 py-2 bg-yellow-500 text-white rounded-md btn-connect" data-id="${f.id}">Connect</button>
+          </div>
+        `;
+        farmerListEl.appendChild(card);
+      });
+
+      // attach listeners
+      document.querySelectorAll('.btn-chat').forEach(b => b.addEventListener('click', (e)=>{
+        const fid = e.currentTarget.getAttribute('data-id'); selectFarmerForChat(fid);
+      }));
+      document.querySelectorAll('.btn-call').forEach(b => b.addEventListener('click', (e)=>{
+        const phone = e.currentTarget.getAttribute('data-phone');
+        // tel: link — works on phones
+        window.location.href = `tel:${phone}`;
+      }));
+      document.querySelectorAll('.btn-connect').forEach(b => b.addEventListener('click', (e)=>{
+        const fid = e.currentTarget.getAttribute('data-id'); openConnectModal(fid);
+      }));
+    }
+
+    /***** Select farmer for chat *****/
+    function selectFarmerForChat(fid){
+      const farmer = farmers.find(f=>f.id===fid);
+      if(!farmer) return;
+      selectedFarmerId = fid;
+      selectedFarmerLabel.innerText = `${farmer.name} — ${farmer.type} (PIN ${farmer.pin})`;
+      telLink.href = `tel:${farmer.phone}`;
+      telLink.onclick = null;
+      renderMessagesFor(farmer.id);
+      // focus input
+      chatInput.focus();
+    }
+
+    /***** Messages render/save *****/
+    function renderMessagesFor(fid){
+      const all = loadMessages();
+      const messages = all[fid] || [];
+      if(messages.length === 0){
+        chatBox.innerHTML = '<p class="text-sm text-gray-500">No messages yet. Start the conversation.</p>';
+        return;
+      }
+      chatBox.innerHTML = messages.map(m=>{
+        const who = m.from === 'vendor' ? 'You' : (m.from === 'farmer' ? 'Farmer' : m.from);
+        const cls = m.from === 'vendor' ? 'text-right' : 'text-left';
+        return `<div class="${cls} mb-2"><div class="inline-block bg-${m.from==='vendor'?'green':'gray'}-100 p-2 rounded-md text-sm"><strong>${who}:</strong> ${escapeHtml(m.text)}</div></div>`;
+      }).join('');
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function escapeHtml(s){ return (s+'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+    sendBtn.addEventListener('click', ()=> {
+      const text = chatInput.value.trim();
+      if(!text || !selectedFarmerId) return alert('Select a farmer and type a message.');
+      const all = loadMessages();
+      if(!all[selectedFarmerId]) all[selectedFarmerId] = [];
+      all[selectedFarmerId].push({ from:'vendor', text, ts:Date.now() });
+      saveMessages(all);
+      chatInput.value = '';
+      renderMessagesFor(selectedFarmerId);
+
+      // Demo: optional simulated farmer reply after delay
+      setTimeout(()=> {
+        const all2 = loadMessages();
+        all2[selectedFarmerId].push({ from:'farmer', text:'Thanks — received your message. I will respond soon.', ts:Date.now() });
+        saveMessages(all2);
+        if(selectedFarmerId) renderMessagesFor(selectedFarmerId);
+      }, 1200);
+    });
+
+    chatInput.addEventListener('keydown', (e)=> { if(e.key==='Enter'){ sendBtn.click(); } });
+
+    /***** Connect modal (simple details) *****/
+    function openConnectModal(fid){
+      const farmer = farmers.find(f=>f.id===fid);
+      if(!farmer) return;
+      alert(`Connect to ${farmer.name}\n\nReg ID: ${farmer.id}\nPhone: ${farmer.phone}\nProduce: ${farmer.produce.join(', ')}\n\nUse Chat / Call / Video buttons in the panel to communicate.`);
+    }
+
+    /***** Search & initialization *****/
+    function filterAndRender(term){
+      term = (term||'').trim().toLowerCase();
+      if(!term) return renderFarmers(farmers);
+      const filtered = farmers.filter(f=>{
+        return f.pin.includes(term) || f.name.toLowerCase().includes(term) || f.produce.join(' ').toLowerCase().includes(term);
+      });
+      renderFarmers(filtered);
+    }
+    searchInput.addEventListener('input', ()=> filterAndRender(searchInput.value));
+    showAllBtn.addEventListener('click', ()=> { searchInput.value=''; filterAndRender(''); });
+
+    // initial render
+    renderFarmers(farmers);
+
+    /***** Voice & Video handling (local media only) *****/
+    let localStream = null;
+
+    const startVoiceBtn = document.getElementById('startVoiceBtn');
+    const stopVoiceBtn  = document.getElementById('stopVoiceBtn');
+    const startVideoBtn  = document.getElementById('startVideoBtn');
+    const stopVideoBtn   = document.getElementById('stopVideoBtn');
+    const localVideoEl   = document.getElementById('localVideo');
+
+    async function startVoice(){
+      try{
+        // request only audio
+        if(localStream){
+          // if exists, stop tracks and re-get to ensure fresh
+          stopMedia();
+        }
+        localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        // NOTE: this is local-only. To connect to remote peer, create RTCPeerConnection and add tracks, then use signaling.
+        startVoiceBtn.disabled = true; stopVoiceBtn.disabled = false;
+        chatBox.innerHTML += `<p class="text-xs text-gray-500">Voice stream started (local only).</p>`;
+      }catch(err){
+        alert('Could not access microphone: ' + err.message);
+      }
+    }
+    function stopVoice(){
+      if(localStream){
+        stopMedia();
+        startVoiceBtn.disabled = false; stopVoiceBtn.disabled = true;
+        chatBox.innerHTML += `<p class="text-xs text-gray-500">Voice stopped.</p>`;
+      }
+    }
+
+    async function startVideo(){
+      try{
+        if(localStream){ stopMedia(); }
+        localStream = await navigator.mediaDevices.getUserMedia({ video: { width: 640 }, audio: true });
+        localVideoEl.srcObject = localStream;
+        localVideoEl.classList.remove('hidden');
+        startVideoBtn.disabled = true; stopVideoBtn.disabled = false;
+        chatBox.innerHTML += `<p class="text-xs text-gray-500">Video started (local preview).</p>`;
+      }catch(err){
+        alert('Could not access camera/microphone: ' + err.message);
+      }
+    }
+    function stopVideo(){
+      if(localStream){
+        stopMedia();
+        localVideoEl.srcObject = null;
+        localVideoEl.classList.add('hidden');
+        startVideoBtn.disabled = false; stopVideoBtn.disabled = true;
+        chatBox.innerHTML += `<p class="text-xs text-gray-500">Video stopped.</p>`;
+      }
+    }
+    function stopMedia(){
+      if(!localStream) return;
+      localStream.getTracks().forEach(t => t.stop());
+      localStream = null;
+    }
+
+    startVoiceBtn.addEventListener('click', startVoice);
+    stopVoiceBtn.addEventListener('click', stopVoice);
+    startVideoBtn.addEventListener('click', startVideo);
+    stopVideoBtn.addEventListener('click', stopVideo);
+
+    // Clean up media when leaving page
+    window.addEventListener('beforeunload', ()=> { stopMedia(); });
+
+    /***** Helpful hint for integration *****/
+    // To integrate real-time chat and multi-user video:
+    // 1) Add a server (Node.js with Socket.IO or similar) to relay signaling and messages.
+    // 2) For chat: send messages via socket.emit('chat', { to: farmerId, text }) and listen on farmer side.
+    // 3) For WebRTC: use signaling channel to exchange offers/answers and ICE candidates, then attach remote streams to remote <video>.
+    // 4) When connected, use RTCPeerConnection.addTrack(localStream.getTracks()) to share audio/video.
+    //
+    // This UI is intentionally standalone so you can attach server logic later at the marked places.
+
+  </script>
+</body>
+</html>

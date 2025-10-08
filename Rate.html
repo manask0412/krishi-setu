@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KrishiSetu - Rates</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="bg-green-700 text-white shadow-md">
+      <div
+        class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between"
+      >
+        <!-- Logo + Name -->
+        <div class="flex items-center space-x-2">
+          <img
+            src="logo.png"
+            alt="KrishiSetu Logo"
+            class="h-10 w-10 rounded-full"
+          />
+          <span class="text-2xl font-bold">KrishiSetu</span>
+        </div>
+        <!-- Navigation -->
+        <nav class="space-x-6">
+          <a href="index.html" class="hover:underline">Home</a>
+          <a href="Rate.html" class="hover:underline font-semibold">Rates</a>
+          <a href="learning.html" class="hover:underline">Learning</a>
+          <a href="contact.html" class="hover:underline">Contact</a>
+        </nav>
+        <!-- Cart Button -->
+        <button
+          id="cart-btn"
+          class="bg-white text-green-700 px-3 py-1 rounded-md font-semibold"
+        >
+          🛒 Cart (<span id="cart-count">0</span>)
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Section -->
+    <main class="max-w-7xl mx-auto px-4 py-10">
+      <h2 class="text-3xl font-bold text-green-700 mb-6">
+        Fruits & Vegetables Rates
+      </h2>
+
+      <!-- Filter -->
+      <div class="mb-6">
+        <label for="category" class="font-semibold text-gray-700"
+          >Select Category:
+        </label>
+        <select id="category" class="border px-3 py-2 rounded-md">
+          <option value="all">All</option>
+          <option value="fruit">Fruits</option>
+          <option value="vegetable">Vegetables</option>
+        </select>
+      </div>
+
+      <!-- Product Grid -->
+      <div
+        id="product-grid"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+      ></div>
+    </main>
+
+    <!-- Cart Modal -->
+    <div
+      id="cart-modal"
+      class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+    >
+      <div class="bg-white rounded-lg shadow-lg w-96 p-6">
+        <h2 class="text-xl font-bold mb-4">🛒 Your Cart</h2>
+        <ul id="cart-items" class="mb-4 space-y-2"></ul>
+        <p class="font-semibold">Total: ₹<span id="cart-total">0</span></p>
+        <div class="mt-4 flex justify-end space-x-2">
+          <button
+            onclick="closeCart()"
+            class="px-4 py-2 bg-gray-300 rounded-md"
+          >
+            Close
+          </button>
+          <button class="px-4 py-2 bg-green-600 text-white rounded-md">
+            Buy
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+      const products = [
+        // 20 Fruits
+        {
+          name: "Apple",
+          price: 120,
+          category: "fruit",
+          image: "./photo/apple.jpg",
+        },
+        {
+          name: "Banana",
+          price: 40,
+          category: "fruit",
+          image: "./photo/Banana.jpg",
+        },
+        {
+          name: "Mango",
+          price: 60,
+          category: "fruit",
+          image: "./photo/mango.jpg",
+        },
+        {
+          name: "Orange",
+          price: 70,
+          category: "fruit",
+          image: "./photo/orange.jpg",
+        },
+        {
+          name: "Grapes",
+          price: 90,
+          category: "fruit",
+          image: "./photo/Grapes.jpg",
+        },
+        {
+          name: "Papaya",
+          price: 50,
+          category: "fruit",
+          image: "./photo/papaya.jpg",
+        },
+        {
+          name: "Pineapple",
+          price: 80,
+          category: "fruit",
+          image: "./photo/pineapple.jpg",
+        },
+        {
+          name: "Watermelon",
+          price: 30,
+          category: "fruit",
+          image: "./photo/watermelon.jpg",
+        },
+        {
+          name: "Guava",
+          price: 55,
+          category: "fruit",
+          image: "./photo/Guava.jpg",
+        },
+        {
+          name: "Pomegranate",
+          price: 140,
+          category: "fruit",
+          image: "./photo/pomegreante.jpg",
+        },
+        {
+          name: "Lychee",
+          price: 150,
+          category: "fruit",
+          image: "./photo/Lychee.jpg",
+        },
+        {
+          name: "Strawberry",
+          price: 200,
+          category: "fruit",
+          image: "./photo/strawberries.jpg",
+        },
+        {
+          name: "Kiwi",
+          price: 180,
+          category: "fruit",
+          image: "./photo/kiwi.jpg",
+        },
+        {
+          name: "Dragon Fruit",
+          price: 250,
+          category: "fruit",
+          image: "./photo/Dragon fruits.jpg",
+        },
+        {
+          name: "Peach",
+          price: 130,
+          category: "fruit",
+          image: "./photo/peach.jpg",
+        },
+        {
+          name: "Plum",
+          price: 110,
+          category: "fruit",
+          image: "./photo/plum.jpg",
+        },
+        {
+          name: "Cherry",
+          price: 300,
+          category: "fruit",
+          image: "./photo/cherry.jpg",
+        },
+        {
+          name: "Pear",
+          price: 100,
+          category: "fruit",
+          image: "./photo/pear.jpg",
+        },
+        {
+          name: "Coconut",
+          price: 50,
+          category: "fruit",
+          image: "./photo/coconut.jpg",
+        },
+        {
+          name: "Jackfruit",
+          price: 45,
+          category: "fruit",
+          image: "./photo/jack fruit.jpg",
+        },
+
+        // 20 Vegetables
+        {
+          name: "Tomato",
+          price: 22,
+          category: "vegetable",
+          image: "./photo/Tomato.jpg",
+        },
+        {
+          name: "Potato",
+          price: 18,
+          category: "vegetable",
+          image: "./photo/potato.jpg",
+        },
+        {
+          name: "Onion",
+          price: 35,
+          category: "vegetable",
+          image: "./photo/Onion.jpg",
+        },
+        {
+          name: "Carrot",
+          price: 40,
+          category: "vegetable",
+          image: "./photo/carrot.jpg",
+        },
+        {
+          name: "Cabbage",
+          price: 25,
+          category: "vegetable",
+          image: "./photo/cabbage.jpg",
+        },
+        {
+          name: "Cauliflower",
+          price: 30,
+          category: "vegetable",
+          image: "./photo/cauliflower.jpg",
+        },
+        {
+          name: "Brinjal",
+          price: 28,
+          category: "vegetable",
+          image: "./photo/brinjal.jpg",
+        },
+        {
+          name: "Spinach",
+          price: 20,
+          category: "vegetable",
+          image: "./photo/spinach.jpg",
+        },
+        {
+          name: "Capsicum",
+          price: 60,
+          category: "vegetable",
+          image: "./photo/capsicum.jpg",
+        },
+        {
+          name: "Ladyfinger",
+          price: 35,
+          category: "vegetable",
+          image: "./photo/ladyfinger.jpg",
+        },
+        {
+          name: "Cucumber",
+          price: 25,
+          category: "vegetable",
+          image: "./photo/cucumber.jpg",
+        },
+        {
+          name: "Pumpkin",
+          price: 30,
+          category: "vegetable",
+          image: "./photo/pumpkin.jpg",
+        },
+        {
+          name: "Bitter Gourd",
+          price: 32,
+          category: "vegetable",
+          image: "./photo/Bitter Gourd.jpg",
+        },
+        {
+          name: "Bottle Gourd",
+          price: 28,
+          category: "vegetable",
+          image: "./photo/Bottle Gourd.jpg",
+        },
+        {
+          name: "Drumstick",
+          price: 45,
+          category: "vegetable",
+          image: "./photo/Drumstick.jpg",
+        },
+        {
+          name: "Beetroot",
+          price: 40,
+          category: "vegetable",
+          image: "./photo/Beetroot.jpg",
+        },
+        {
+          name: "Green Beans",
+          price: 50,
+          category: "vegetable",
+          image: "./photo/Geen Beans.jpg",
+        },
+        {
+          name: "Radish",
+          price: 20,
+          category: "vegetable",
+          image: "./photo/radish.jpg",
+        },
+        {
+          name: "Sweet Corn",
+          price: 55,
+          category: "vegetable",
+          image: "./photo/sweet corn.jpg",
+        },
+        {
+          name: "Fenugreek",
+          price: 25,
+          category: "vegetable",
+          image: "./photo/fenugreek.jpg",
+        },
+      ];
+
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      function displayProducts(category = "all") {
+        const grid = document.getElementById("product-grid");
+        grid.innerHTML = "";
+
+        products
+          .filter((p) => category === "all" || p.category === category)
+          .forEach((p) => {
+            const card = document.createElement("div");
+            card.className = "bg-white rounded-lg shadow-md p-4 flex flex-col";
+            card.innerHTML = `
+            <img src="${p.image}" alt="${p.name}" class="h-40 w-full object-cover rounded-md mb-3">
+            <h3 class="text-lg font-semibold">${p.name}</h3>
+            <p class="text-gray-600">₹${p.price}/kg</p>
+            <div class="mt-auto flex flex-col gap-2">
+              <button onclick="addToCart('${p.name}', ${p.price})" 
+                      class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-md">
+                🛒 Add to Cart
+              </button>
+              <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md">
+                🤝 Connect Nearby Farmer
+              </button>
+            </div>
+          `;
+            grid.appendChild(card);
+          });
+      }
+
+      function addToCart(product, price) {
+        cart.push({ product, price });
+        localStorage.setItem("cart", JSON.stringify(cart));
+        updateCartCount();
+      }
+
+      function updateCartCount() {
+        document.getElementById("cart-count").innerText = cart.length;
+      }
+
+      function showCart() {
+        const cartItemsEl = document.getElementById("cart-items");
+        cartItemsEl.innerHTML = "";
+        let total = 0;
+
+        cart.forEach((item, index) => {
+          cartItemsEl.innerHTML += `
+          <li class="flex justify-between">
+            <span>${item.product} - ₹${item.price}</span>
+            <button onclick="removeFromCart(${index})" class="text-red-500">❌</button>
+          </li>
+        `;
+          total += item.price;
+        });
+
+        document.getElementById("cart-total").innerText = total;
+        document.getElementById("cart-modal").classList.remove("hidden");
+      }
+
+      function closeCart() {
+        document.getElementById("cart-modal").classList.add("hidden");
+      }
+
+      function removeFromCart(index) {
+        cart.splice(index, 1);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        showCart();
+        updateCartCount();
+      }
+
+      // Event Listeners
+      document.getElementById("cart-btn").addEventListener("click", showCart);
+      document
+        .getElementById("category")
+        .addEventListener("change", (e) => displayProducts(e.target.value));
+
+      // Initialize
+      displayProducts();
+      updateCartCount();
+    </script>
+  </body>
+</html>

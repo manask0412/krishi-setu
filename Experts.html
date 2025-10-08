@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Farming Doctors | KrishiSetu</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        justify-content: center;
+        align-items: center;
+        z-index: 50;
+      }
+      .modal-content {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 400px;
+        width: 90%;
+      }
+      #chatBox {
+        height: 200px;
+        overflow-y: auto;
+        background: #f9fafb;
+        padding: 10px;
+        border-radius: 8px;
+      }
+      .msg {
+        margin-bottom: 6px;
+      }
+      .msg.user {
+        text-align: right;
+        color: green;
+      }
+      .msg.doctor {
+        text-align: left;
+        color: gray;
+      }
+    </style>
+  </head>
+  <body class="bg-green-50 font-sans">
+    <!-- Header -->
+    <header class="bg-white shadow sticky top-0 z-30">
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4"
+      >
+        <div class="flex items-center gap-3">
+          <img src="logo.png" alt="Logo" class="w-10 h-10 rounded-full" />
+          <a href="index.html" class="text-2xl font-bold text-green-700"
+            >KrishiSetu</a
+          >
+        </div>
+        <div class="flex items-center gap-4">
+          <input
+            type="text"
+            placeholder="Search by PIN Code"
+            id="pinSearch"
+            class="border rounded-md p-2 text-sm"
+          />
+          <a href="index.html" class="text-sm hover:text-green-600">Home</a>
+          <a href="Rate.html" class="text-sm hover:text-green-600">Rates</a>
+          <a href="vendors.html" class="text-sm hover:text-green-600"
+            >Vendors</a
+          >
+          <a
+            href="Experts.html"
+            class="text-sm text-green-700 border-b-2 border-green-700"
+            >Experts</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <!-- Expert Section -->
+    <section class="py-10 px-6 max-w-7xl mx-auto">
+      <h2 class="text-3xl font-bold text-green-700 mb-6 text-center">
+        Farming Doctors Near You
+      </h2>
+      <div
+        id="doctorList"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+      ></div>
+    </section>
+
+    <!-- Appointment Modal -->
+    <div id="appointmentModal" class="modal">
+      <div class="modal-content">
+        <h3 class="text-lg font-bold mb-2">Book Appointment</h3>
+        <form id="appointmentForm" class="space-y-3">
+          <input type="hidden" id="doctorName" />
+          <div>
+            <label class="text-sm font-medium">Your Name</label>
+            <input type="text" class="border rounded w-full p-2" required />
+          </div>
+          <div>
+            <label class="text-sm font-medium">Preferred Date</label>
+            <input type="date" class="border rounded w-full p-2" required />
+          </div>
+          <button class="bg-green-600 text-white w-full py-2 rounded">
+            Book
+          </button>
+          <button
+            type="button"
+            onclick="closeModal('appointmentModal')"
+            class="mt-2 w-full bg-gray-300 py-2 rounded"
+          >
+            Cancel
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Chat Modal -->
+    <div id="chatModal" class="modal">
+      <div class="modal-content">
+        <h3 class="text-lg font-bold mb-2">Chat with Doctor</h3>
+        <div id="chatBox"></div>
+        <div class="mt-2 flex">
+          <input
+            type="text"
+            id="chatInput"
+            class="border flex-1 p-2 rounded-l"
+            placeholder="Type message..."
+          />
+          <button
+            class="bg-green-600 text-white px-4 rounded-r"
+            onclick="sendMsg()"
+          >
+            Send
+          </button>
+        </div>
+        <button
+          class="mt-3 w-full bg-gray-300 py-2 rounded"
+          onclick="closeModal('chatModal')"
+        >
+          Close Chat
+        </button>
+      </div>
+    </div>
+
+    <!-- Video Call Modal -->
+    <div id="videoModal" class="modal">
+      <div class="modal-content text-center">
+        <h3 class="text-lg font-bold mb-2">Video Call with Doctor</h3>
+        <p class="text-sm text-gray-600 mb-3">Simulating live video call...</p>
+        <div
+          class="bg-gray-200 w-full h-48 rounded-md flex justify-center items-center text-gray-500"
+        >
+          📹 Doctor Video Stream
+        </div>
+        <button
+          class="mt-4 w-full bg-red-500 text-white py-2 rounded"
+          onclick="closeModal('videoModal')"
+        >
+          End Call
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // ===== Doctor List (40 Farming Doctors) =====
+      const doctors = [
+        {
+          name: "Dr. Ramesh Patra",
+          crop: "Mango",
+          experience: "10 years",
+          phone: "9876500001",
+          pin: "751001",
+        },
+        {
+          name: "Dr. Anita Sharma",
+          crop: "Tomato",
+          experience: "8 years",
+          phone: "9876500002",
+          pin: "751002",
+        },
+        {
+          name: "Dr. Prakash Sahu",
+          crop: "Potato",
+          experience: "6 years",
+          phone: "9876500003",
+          pin: "751003",
+        },
+        {
+          name: "Dr. Laxmi Das",
+          crop: "Banana",
+          experience: "9 years",
+          phone: "9876500004",
+          pin: "751004",
+        },
+        {
+          name: "Dr. Pawan Kumar",
+          crop: "Onion",
+          experience: "11 years",
+          phone: "9876500005",
+          pin: "751005",
+        },
+        {
+          name: "Dr. Jyoti Mishra",
+          crop: "Carrot",
+          experience: "7 years",
+          phone: "9876500006",
+          pin: "751006",
+        },
+        {
+          name: "Dr. Deepak Rout",
+          crop: "Apple",
+          experience: "12 years",
+          phone: "9876500007",
+          pin: "751007",
+        },
+        {
+          name: "Dr. Seema Das",
+          crop: "Cabbage",
+          experience: "9 years",
+          phone: "9876500008",
+          pin: "751008",
+        },
+        {
+          name: "Dr. Manoj Nayak",
+          crop: "Spinach",
+          experience: "10 years",
+          phone: "9876500009",
+          pin: "751009",
+        },
+        {
+          name: "Dr. Nisha Sahu",
+          crop: "Guava",
+          experience: "5 years",
+          phone: "9876500010",
+          pin: "751010",
+        },
+        {
+          name: "Dr. Ashok Patnaik",
+          crop: "Orange",
+          experience: "15 years",
+          phone: "9876500011",
+          pin: "751011",
+        },
+        {
+          name: "Dr. Kiran Bhoi",
+          crop: "Pineapple",
+          experience: "9 years",
+          phone: "9876500012",
+          pin: "751012",
+        },
+        {
+          name: "Dr. Priya Panda",
+          crop: "Grapes",
+          experience: "7 years",
+          phone: "9876500013",
+          pin: "751013",
+        },
+        {
+          name: "Dr. Ritu Jena",
+          crop: "Papaya",
+          experience: "10 years",
+          phone: "9876500014",
+          pin: "751014",
+        },
+        {
+          name: "Dr. Sujit Swain",
+          crop: "Watermelon",
+          experience: "8 years",
+          phone: "9876500015",
+          pin: "751015",
+        },
+        {
+          name: "Dr. Tanmay Dash",
+          crop: "Cauliflower",
+          experience: "12 years",
+          phone: "9876500016",
+          pin: "751016",
+        },
+        {
+          name: "Dr. Mitali Behera",
+          crop: "Cucumber",
+          experience: "6 years",
+          phone: "9876500017",
+          pin: "751017",
+        },
+        {
+          name: "Dr. Govind Tripathy",
+          crop: "Pumpkin",
+          experience: "10 years",
+          phone: "9876500018",
+          pin: "751018",
+        },
+        {
+          name: "Dr. Ranjita Naik",
+          crop: "Brinjal",
+          experience: "9 years",
+          phone: "9876500019",
+          pin: "751019",
+        },
+        {
+          name: "Dr. Alok Satpathy",
+          crop: "Ladyfinger",
+          experience: "8 years",
+          phone: "9876500020",
+          pin: "751020",
+        },
+        {
+          name: "Dr. Rupa Singh",
+          crop: "Sweet Corn",
+          experience: "10 years",
+          phone: "9876500021",
+          pin: "751021",
+        },
+        {
+          name: "Dr. Anil Kumar",
+          crop: "Chili",
+          experience: "11 years",
+          phone: "9876500022",
+          pin: "751022",
+        },
+        {
+          name: "Dr. Binod Reddy",
+          crop: "Pomegranate",
+          experience: "13 years",
+          phone: "9876500023",
+          pin: "751023",
+        },
+        {
+          name: "Dr. Sneha Gupta",
+          crop: "Strawberry",
+          experience: "6 years",
+          phone: "9876500024",
+          pin: "751024",
+        },
+        {
+          name: "Dr. Rajesh Sethi",
+          crop: "Kiwi",
+          experience: "8 years",
+          phone: "9876500025",
+          pin: "751025",
+        },
+        {
+          name: "Dr. Leena Patro",
+          crop: "Dragon Fruit",
+          experience: "7 years",
+          phone: "9876500026",
+          pin: "751026",
+        },
+        {
+          name: "Dr. Abhishek Mohanty",
+          crop: "Cherry",
+          experience: "9 years",
+          phone: "9876500027",
+          pin: "751027",
+        },
+        {
+          name: "Dr. Nandini Rout",
+          crop: "Beetroot",
+          experience: "6 years",
+          phone: "9876500028",
+          pin: "751028",
+        },
+        {
+          name: "Dr. Pritam Kar",
+          crop: "Green Beans",
+          experience: "10 years",
+          phone: "9876500029",
+          pin: "751029",
+        },
+        {
+          name: "Dr. Subha Panda",
+          crop: "Radish",
+          experience: "5 years",
+          phone: "9876500030",
+          pin: "751030",
+        },
+        {
+          name: "Dr. Rakesh Sahu",
+          crop: "Fenugreek",
+          experience: "9 years",
+          phone: "9876500031",
+          pin: "751031",
+        },
+        {
+          name: "Dr. Amrita Nanda",
+          crop: "Jackfruit",
+          experience: "11 years",
+          phone: "9876500032",
+          pin: "751032",
+        },
+        {
+          name: "Dr. Satyajit Patra",
+          crop: "Pear",
+          experience: "8 years",
+          phone: "9876500033",
+          pin: "751033",
+        },
+        {
+          name: "Dr. Nilima Nayak",
+          crop: "Peach",
+          experience: "7 years",
+          phone: "9876500034",
+          pin: "751034",
+        },
+        {
+          name: "Dr. Rajani Tripathy",
+          crop: "Plum",
+          experience: "6 years",
+          phone: "9876500035",
+          pin: "751035",
+        },
+        {
+          name: "Dr. Harihar Dash",
+          crop: "Bitter Gourd",
+          experience: "10 years",
+          phone: "9876500036",
+          pin: "751036",
+        },
+        {
+          name: "Dr. Minati Behera",
+          crop: "Bottle Gourd",
+          experience: "8 years",
+          phone: "9876500037",
+          pin: "751037",
+        },
+        {
+          name: "Dr. Debasis Jena",
+          crop: "Capsicum",
+          experience: "9 years",
+          phone: "9876500038",
+          pin: "751038",
+        },
+        {
+          name: "Dr. Utkal Sahoo",
+          crop: "Drumstick",
+          experience: "7 years",
+          phone: "9876500039",
+          pin: "751039",
+        },
+        {
+          name: "Dr. Meena Patnaik",
+          crop: "Coconut",
+          experience: "12 years",
+          phone: "9876500040",
+          pin: "751040",
+        },
+      ];
+
+      const doctorList = document.getElementById("doctorList");
+      const renderDoctors = (filterPin = "") => {
+        doctorList.innerHTML = "";
+        doctors
+          .filter((doc) => (filterPin ? doc.pin.includes(filterPin) : true))
+          .forEach((doc) => {
+            const card = document.createElement("div");
+            card.className =
+              "bg-white shadow-md rounded-lg p-5 border border-green-200";
+            card.innerHTML = `
+            <h3 class="text-lg font-bold text-green-700">${doc.name}</h3>
+            <p class="text-sm text-gray-600">Specialization: <b>${doc.crop}</b></p>
+            <p class="text-sm text-gray-600">Experience: ${doc.experience}</p>
+            <p class="text-sm text-gray-600">Contact: ${doc.phone}</p>
+            <div class="flex gap-2 mt-3 flex-wrap">
+              <button onclick="openAppointment('${doc.name}')" class="bg-green-600 text-white px-3 py-1 rounded-md text-sm">Book Appointment</button>
+              <button onclick="openChat('${doc.name}')" class="bg-blue-500 text-white px-3 py-1 rounded-md text-sm">Chat</button>
+              <button onclick="openVideo('${doc.name}')" class="bg-yellow-500 text-white px-3 py-1 rounded-md text-sm">Video Call</button>
+              <a href="tel:${doc.phone}" class="bg-gray-600 text-white px-3 py-1 rounded-md text-sm">Call</a>
+            </div>
+          `;
+            doctorList.appendChild(card);
+          });
+      };
+      renderDoctors();
+
+      document
+        .getElementById("pinSearch")
+        .addEventListener("input", (e) => renderDoctors(e.target.value));
+
+      // ===== Modal Functions =====
+      function openModal(id) {
+        document.getElementById(id).style.display = "flex";
+      }
+      function closeModal(id) {
+        document.getElementById(id).style.display = "none";
+      }
+
+      // Appointment Modal
+      function openAppointment(name) {
+        document.getElementById("doctorName").value = name;
+        openModal("appointmentModal");
+      }
+
+      // Chat Modal
+      let chatDoctor = "";
+      function openChat(name) {
+        chatDoctor = name;
+        document.getElementById(
+          "chatBox"
+        ).innerHTML = `<div class="msg doctor"><b>${name}:</b> Hello! How can I help you?</div>`;
+        openModal("chatModal");
+      }
+      function sendMsg() {
+        const input = document.getElementById("chatInput");
+        const box = document.getElementById("chatBox");
+        if (input.value.trim() !== "") {
+          box.innerHTML += `<div class='msg user'><b>You:</b> ${input.value}</div>`;
+          input.value = "";
+          setTimeout(() => {
+            box.innerHTML += `<div class='msg doctor'><b>${chatDoctor}:</b> Please provide details about your crop issue.</div>`;
+            box.scrollTop = box.scrollHeight;
+          }, 1000);
+        }
+      }
+
+      // Video Call Modal
+      function openVideo(name) {
+        openModal("videoModal");
+      }
+    </script>
+  </body>
+</html>
